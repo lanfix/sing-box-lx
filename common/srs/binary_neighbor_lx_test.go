@@ -10,8 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// lx: SPEC 113 — neighbor items have no binary encoding: compiling them must
-// fail instead of silently dropping the condition and widening the rule.
+// lx: SPEC 113 — neighbor items have no binary encoding, compiling them must fail.
 func TestWriteRejectsNeighborItems(t *testing.T) {
 	t.Parallel()
 	for _, rule := range []option.DefaultHeadlessRule{

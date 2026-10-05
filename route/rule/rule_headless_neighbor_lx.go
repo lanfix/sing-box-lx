@@ -9,12 +9,8 @@ import (
 	"github.com/sagernet/sing/service"
 )
 
-// lx: SPEC 113 — `source_mac_address` and `source_hostname` in headless rules,
-// so a remote or local rule-set can change the device list without reloading
-// the whole config. The neighbor resolver is created before rule-sets are
-// loaded and a rule-set cannot start it, so such a rule requires the router to
-// look up neighbors already (`route.find_neighbor` or a neighbor route/DNS
-// rule); otherwise the rule-set is rejected instead of silently never matching.
+// lx: SPEC 113 — neighbor items in headless rules. The resolver starts before
+// rule-sets load, so without `route.find_neighbor` the rule-set is rejected.
 func appendNeighborHeadlessItems(ctx context.Context, rule *DefaultHeadlessRule, options option.DefaultHeadlessRule) error {
 	if len(options.SourceMACAddress) == 0 && len(options.SourceHostname) == 0 {
 		return nil
