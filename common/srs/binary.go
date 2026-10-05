@@ -304,6 +304,11 @@ func readDefaultRule(reader varbin.Reader, recover bool) (rule option.DefaultHea
 }
 
 func writeDefaultRule(writer varbin.Writer, rule option.DefaultHeadlessRule, generateVersion uint8) error {
+	// lx:begin neighbor-rule-set
+	if len(rule.SourceMACAddress) > 0 || len(rule.SourceHostname) > 0 {
+		return E.New("`source_mac_address` and `source_hostname` rule items are only supported in source rule-set")
+	}
+	// lx:end neighbor-rule-set
 	err := binary.Write(writer, binary.BigEndian, uint8(0))
 	if err != nil {
 		return err
