@@ -273,6 +273,10 @@ type DefaultHeadlessRule struct {
 	WIFIBSSID               badoption.Listable[string]                                                  `json:"wifi_bssid,omitempty"`
 	NetworkInterfaceAddress *badjson.TypedMap[InterfaceType, badoption.Listable[*badoption.Prefixable]] `json:"network_interface_address,omitempty"`
 	DefaultInterfaceAddress badoption.Listable[*badoption.Prefixable]                                   `json:"default_interface_address,omitempty"`
+	// lx:begin neighbor-rule-set
+	SourceMACAddress badoption.Listable[string] `json:"source_mac_address,omitempty"`
+	SourceHostname   badoption.Listable[string] `json:"source_hostname,omitempty"`
+	// lx:end neighbor-rule-set
 
 	Invert bool `json:"invert,omitempty"`
 
