@@ -70,6 +70,7 @@ timelines and the recommended mobile configuration live in
 - [11. Protocol sniffers for LAN traffic (SPEC 078 / 080)](#11-protocol-sniffers-for-lan-traffic-spec-078--080)
 - [12. Validate & build](#12-validate--build)
 - [13. The `lx` root block (SPEC 098)](#13-the-lx-root-block-spec-098)
+- [14. Device rules in rule-sets: `source_mac_address`, `source_hostname` (SPEC 113)](#14-device-rules-in-rule-sets-source_mac_address-source_hostname-spec-113)
 
 ---
 
@@ -1034,3 +1035,55 @@ with `route.lx_idle_*` is shown as `lx.wg.*`, and the old keys are gone from it.
 
 `single_engine` and `lazy_start` are reserved for SPEC 096. Until that lands, an `lx.naive`
 sub-block is rejected like any unknown key.
+
+---
+
+## 14. Device rules in rule-sets: `source_mac_address`, `source_hostname` (SPEC 113)
+
+Upstream 1.14 matches the source device by MAC address and DHCP hostname, but only in route and
+DNS rules, so changing the list of devices means changing the config and restarting the core. In
+sing-box-lx the same two items are also accepted in **source-format** rule-sets (`local`,
+`remote` with `"format": "source"`, `inline`). A `remote` or `local` rule-set reloads on its own,
+so a router UI can move a device between groups without a restart and without dropping
+connections.
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `source_mac_address` | string or list | Source device MAC; any notation `net.ParseMAC` accepts (`aa:bb:…`, `AA-BB-…`) |
+| `source_hostname` | string or list | Source device hostname from DHCP leases |
+
+Rules and limits:
+
+- **`route.find_neighbor: true` is required** (or any neighbor item in route/DNS rules). The
+  neighbor resolver starts before rule-sets are loaded, and a rule-set cannot start it. Without it
+  the rule-set is rejected: at start the core does not start; a later reload keeps the previous
+  rule-set and logs `… require route.find_neighbor`.
+- **Source format only.** `sing-box rule-set compile` refuses these items instead of dropping
+  them: there is no binary encoding for them, and a dropped condition would widen the rule.
+- Matching is the upstream one: MAC from the neighbor table (netlink on Linux) or
+  `dhcp_lease_files`, hostname from the lease files. The core must see the LAN directly (router,
+  `network_mode: host`).
+- Within a rule the items combine with the others by AND; logical rules work as usual.
+
+```json
+{
+  "route": {
+    "find_neighbor": true,
+    "rule_set": [
+      { "type": "remote", "tag": "trusted-devices", "format": "source",
+        "url": "http://127.0.0.1:8080/api/ruleset/trusted-devices", "update_interval": "30s" }
+    ],
+    "rules": [
+      { "rule_set": "trusted-devices", "outbound": "proxy" }
+    ],
+    "final": "direct"
+  }
+}
+```
+
+```json
+{ "version": 5, "rules": [ { "source_mac_address": ["aa:bb:cc:dd:ee:01", "aa:bb:cc:dd:ee:02"] } ] }
+```
+
+When upstream ships these items in headless rules, this extension is dropped in favour of the
+upstream form (see the removal condition in SPEC 113).

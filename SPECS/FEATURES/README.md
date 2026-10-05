@@ -24,6 +24,7 @@
 | [014-LXD_DAEMON](014-LXD_DAEMON/FEATURE.md) | Headless-демон `sing-box lxd`: ядро in-process за reload-surviving каналом (gRPC + admin-REST на одном порту), apply с автооткатом на last-good, mTLS с регистрацией клиентов, системная служба, хранилище файловых ресурсов, диагностика демона и телеметрия хоста, справочник «IP → устройство» | `with_lxd` | 055 · 056 · 057 · 063 · 065 · 066 · 067 · 068 · 100 |
 | [015-CHAIN](015-CHAIN/FEATURE.md) | ✅ Outbound `chain`: виртуальная цепочка хопов из групп и узлов — группы не копируются, звенья рантайм-экземпляры, прозрачный `direct`, авто-MTU, `strip`/`rewrite` | `with_lx_chain` | 073 · 075 |
 | [016-SNIFF](016-SNIFF/FEATURE.md) | Снифферы для чужих туннелей и звонков: `wireguard`, `openvpn`, `ike`, `tailscale`, `sip` — по форме первого пакета, апстримные файлы не правим | — | 078 · 079 |
+| [018-NEIGHBOR_RULE_SET](018-NEIGHBOR_RULE_SET/FEATURE.md) | `source_mac_address` / `source_hostname` в rule-set формата `source`: список устройств роутера меняется без перезапуска ядра | — | 113 |
 | [017-REALITY](017-REALITY/FEATURE.md) | ✅ Клиент REALITY против актуального Xray: версия клиента, гибридный key share `X25519MLKEM768` на `chrome`/`firefox`/`safari` (форк-сабмодуль utls), по-узловой `tls.reality.key_share` `classical`/`hybrid`, фрагментация ClientHello в REALITY — отгружено (`lx.36` … `v1.14.1-lx.4`), стенд-верифицировано | — (внутри `with_utls`) | 053 · 083 · 086 · 087 · 088 · 089 · 090 |
 
 ## Процессные

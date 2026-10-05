@@ -48,6 +48,7 @@
 | [014](../../TASKS/014-CLASH_API_TO_COMMANDCLIENT_MIGRATION/SPEC.md) | Два набора build-тегов | `release/DEFAULT_BUILD_TAGS` | **CONSTRAINT** | `with_clash_api` выключается **только в AAR**; desktop/CLI обязан его сохранять (внешние дашборды) |
 | [025](../../TASKS/025-AWG_TRANSPORT_PADDING_OVERRUN/SPEC.md) · [026](../../TASKS/026-AWG_MAGIC_VS_RESERVED_CLEAR/SPEC.md) | Фиксы в submodule | Тег `wireguard-go` (сейчас `v0.0.4-8-g7d15f33`) | **HOLD** | Снятие происходит бампом submodule, не мержем ядра — проверять отдельно |
 | [040](../../TASKS/040-SINGTUN_ACCEPTLOOP_SELFHEAL/SPEC.md) | Форк-сабмодуль `sing-tun` + `replace` | Апстримные коммиты `Update sing-tun` (бамп `go.mod`) | **HOLD** | ⚠️ **Апстримный бамп брать нельзя вслепую — он может быть СТАРШЕ нашей базы.** Синк 2026-08-01: `Update sing-tun` (`c8f7676`) вёл на ревизию 27.07, наш форк основан на 29.07 (`2d9b8aed5fe2`) — взятие откатило бы sing-tun назад и снесло `replace`. Правило: сверять дату/ревизию бампа с нашей базой; брать только если апстрим **новее**, и тогда перебазировать патч сабмодуля |
+| [113](../../TASKS/113-NEIGHBOR_RULE_SET/SPEC.md) | Поля соседей в headless-правиле, запрет их компиляции в `.srs` | `DefaultHeadlessRule`, `NewDefaultHeadlessRule`, `srs.writeDefaultRule`, `RuleSetVersion*` | **HOLD** | Апстрим добавит `source_mac_address`/`source_hostname` в headless-правила → DROP (поля, вызов, `rule_headless_neighbor_lx.go`; запрет компиляции — если у апстрима появится двоичная запись). Новую версию rule-set и номера `ruleItem*` у себя не заводить |
 
 ## Ритуал мержа
 
