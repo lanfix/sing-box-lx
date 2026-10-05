@@ -28,6 +28,17 @@ required for stable tags); this changelog section is the fallback used for pre-r
 > тогда. Пользовательские ноты билингвальны там, где это важно, — в
 > [`releases/`](releases/).
 
+#### v1.14.2-lx.11-mac.1
+
+Сборка форка `lanfix/sing-box-lx` поверх `v1.14.2-lx.11` с одной задачей; база и тулчейн не менялись.
+
+- 🆕 **`source_mac_address` и `source_hostname` в rule-set формата `source`** ([SPEC 113](../SPECS/TASKS/113-NEIGHBOR_RULE_SET/SPEC.md),
+  фича [018-NEIGHBOR_RULE_SET](../SPECS/FEATURES/018-NEIGHBOR_RULE_SET/FEATURE.md)). Роутер меняет списки
+  устройств перечитыванием `remote`/`local` rule-set — без перезапуска ядра и разрыва соединений.
+  Требует `route.find_neighbor: true`, иначе rule-set отвергается; `rule-set compile` такие поля не
+  компилирует. Версия rule-set и двоичный формат не тронуты. Конфиг — §14 в
+  [lx-config.md](lx-config.md).
+
 #### v1.14.2-lx.11
 
 Синк с `upstream/stable` на 4 коммита от 2026-09-29, отложенных в lx.10. Пользовательские ноты
