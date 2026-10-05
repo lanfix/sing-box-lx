@@ -194,6 +194,12 @@ func NewDefaultHeadlessRule(ctx context.Context, options option.DefaultHeadlessR
 			rule.allItems = append(rule.allItems, item)
 		}
 	}
+	// lx:begin neighbor-rule-set
+	err := appendNeighborHeadlessItems(ctx, rule, options)
+	if err != nil {
+		return nil, err
+	}
+	// lx:end neighbor-rule-set
 	if len(options.AdGuardDomain) > 0 {
 		item := NewAdGuardDomainItem(options.AdGuardDomain)
 		rule.destinationAddressItems = append(rule.destinationAddressItems, item)
