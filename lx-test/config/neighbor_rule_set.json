@@ -1,0 +1,49 @@
+{
+  "log": {
+    "level": "info"
+  },
+  "inbounds": [
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "127.0.0.1",
+      "listen_port": 2080
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    }
+  ],
+  "route": {
+    "find_neighbor": true,
+    "rule_set": [
+      {
+        "type": "inline",
+        "tag": "trusted-devices",
+        "rules": [
+          {
+            "source_mac_address": [
+              "aa:bb:cc:dd:ee:01",
+              "AA-BB-CC-DD-EE-02"
+            ]
+          },
+          {
+            "source_hostname": "living-room-tv"
+          }
+        ]
+      }
+    ],
+    "rules": [
+      {
+        "rule_set": "trusted-devices",
+        "outbound": "direct"
+      },
+      {
+        "action": "reject"
+      }
+    ],
+    "final": "direct"
+  }
+}
